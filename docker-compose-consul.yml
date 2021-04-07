@@ -1,14 +1,14 @@
 version: '3'
-services:
+services:  
   consul-server1:
     image: consul:latest
-    hostname: "consul-server1"
+    hostname: "consul-server1" #服务名称
     ports:
-      - "8500:8500"
+      - "8500:8500"  #映射端口
       - "53"
     volumes:
-      - ./consul/data1:/consul/data
-    command: "agent -server -bootstrap-expect 3 -ui -disable-host-node-id -client 0.0.0.0"
+      - ./consul/data1:/consul/data   #映射数据存储目录
+    command: "agent -server -bootstrap -ui -disable-host-node-id -client 0.0.0.0"  #启动命令
   consul-server2:
     image: consul:latest
     hostname: "consul-server2"
@@ -16,7 +16,7 @@ services:
       - "8501:8500"
       - "53"
     volumes:
-      - ./consul/data2:/consul/data
+      - ./consul/data2:/consul/data   
     command: "agent -server -ui -join consul-server1 -disable-host-node-id -client 0.0.0.0"
     depends_on:
       - consul-server1
@@ -31,15 +31,15 @@ services:
     command: "agent -server -ui -join consul-server1 -disable-host-node-id -client 0.0.0.0"
     depends_on:
       - consul-server1
-  consul-node1:
-    image: consul:latest
-    hostname: "consul-node1"
-    command: "agent -join consul-server1 -disable-host-node-id"
-    depends_on:
-      - consul-server1
-  consul-node2:
-    image: consul:latest
-    hostname: "consul-node2"
-    command: "agent -join consul-server1 -disable-host-node-id"
-    depends_on:
-      - consul-server1
+  # consul-node1:
+  #   image: consul:latest
+  #   hostname: "consul-node1"
+  #   command: "agent -join consul-server1 -disable-host-node-id"
+  #   depends_on:
+  #     - consul-server1
+  # consul-node2:
+  #   image: consul:latest
+  #   hostname: "consul-node2"
+  #   command: "agent -join consul-server1 -disable-host-node-id"
+  #   depends_on:
+  #     - consul-server1
