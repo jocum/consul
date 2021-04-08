@@ -47,3 +47,22 @@ consul 的架构是什么，官方给出了一个很直观的图片
 ## SERVER-LEADER
 
 - 中间那个 SERVER 下面有 LEADER 的字眼，表明这个 SERVER 是它们的老大，它和其它 SERVER 不一样的一点是，它需要负责同步注册的信息给其它的 SERVER，同时也要负责各个节点的健康监测。
+
+
+
+# 部分常用命令
+```
+    # 查看 节点状态 可用看到集群的leader 是那个服务器
+    docker exec NODE_NAME  consul operator raft list-peers
+    # 注册一个服务到 consul  通过json 文件
+    curl --request PUT --data @test.json http://127.0.0.1:8503/v1/agent/service/register
+    # 写入一个 key-value
+    consul kv put  key value
+    # 读取一个 key-value
+    consul kv get  key
+```
+
+# 踩过的坑
+- 如果你直接对接consul的server服务器，而不是通过client。那么你注册的服务不会是分布式的只会存在于该server。如果是通过client模式注册的则会在集群中的任意server，client 都能获取到。
+  同样的操作对key-value确是无论使用server还是client不会存在上述的bug
+

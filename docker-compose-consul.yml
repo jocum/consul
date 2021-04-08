@@ -31,6 +31,17 @@ services:
     command: "agent -server -ui -join consul-server1 -disable-host-node-id -client 0.0.0.0"
     depends_on:
       - consul-server1
+  consul-client1:
+    image: consul:latest
+    hostname: "consul-client1"
+    ports:
+      - "8503:8500"
+      - "53"
+    volumes:
+      - ./consul/data4:/consul/data
+    command: "agent  -ui -join consul-server1 -disable-host-node-id -client 0.0.0.0"
+    depends_on:
+      - consul-server1
   # consul-node1:
   #   image: consul:latest
   #   hostname: "consul-node1"
